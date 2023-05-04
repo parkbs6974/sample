@@ -1,0 +1,80 @@
+/* 카테고리별 보기 */
+.categoryShow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+* 카테고리 선택박스 */ select {
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 리뷰 항목 */
+.review-item {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* 리뷰 이미지 */
+.review-img {
+    flex: 1 1 200px;
+    height: 200px;
+    background-color: #f5f5f5;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* 리뷰 내용 */
+.review-content {
+    flex: 2 1 400px;
+    padding: 10px;
+}
+
+/* 작성자 */
+.review-author {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* 날짜 */
+.review-date {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #999;
+}
+
+/* 리뷰 내용 */
+.review-text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.parent-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.parent-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.board_page {
+    position: absolute;
+    bottom: 0;
+    /* 여기에 다른 스타일 속성 추가 */
+}

@@ -1,0 +1,64 @@
+   @import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+	
+	
+	html, body {
+		width: 1200px;
+  		padding-bottom: 40px;
+  		font-family: "Nanum Gothic", arial, helvetica, sans-serif;
+  		background-repeat: no-repeat;
+	}
+	
+    .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+	}
+	
+	.card-title img{
+    	width: 200px;
+		margin: 0;
+	    margin-left: auto;
+	    margin-right: auto;
+    }
+
+    #btn-Yes{
+        background-color: #8aa1a1;
+        border: none;
+    }
+	
+	.login .form-control {
+  		position: relative;
+  		height: auto;
+  		-webkit-box-sizing: border-box;
+     	-moz-box-sizing: border-box;
+        	 box-sizing: border-box;
+  		padding: 10px;
+  		font-size: 16px;
+	}
+	
+    .checkbox{
+        margin-right: 20px;
+        text-align: right;
+    }
+    
+    .card-title{
+        margin-left: 30px;
+    }
+
+    .links{
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    a{ 
+    	color: black;
+    	text-decoration: none; 
+    }
+    .check{
+    	color : red;
+    }
+    
+    .centerImg {
+    	vertical-align: middle;
+    	border-style: none;
+    }

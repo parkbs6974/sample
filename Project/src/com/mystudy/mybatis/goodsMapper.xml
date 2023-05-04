@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goods">
+	
+	<!-- 전체 게시글 개수 조회 -->
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM GOODS
+	</select>
+	
+	<!-- 전체 물품 목록 조회 -->
+	<select id="all" resultType="goodsVO">
+		SELECT * FROM GOODS ORDER BY GOODS_NAME
+	</select>
+	
+	<!-- our new product 용도 -->
+	<select id="new" resultType="goodsVO">
+		SELECT * FROM GOODS <![CDATA[WHERE ROWNUM <=6]]> 
+		ORDER BY GOODS_NUM DESC
+	</select>
+	
+	<!-- 카테고리별 물품 조회 -->
+	<select id="menuList" parameterType="string" resultType="goodsVO">
+		SELECT * FROM GOODS
+		WHERE GOODS_MENU = #{menu}
+		ORDER BY GOODS_NAME
+	</select>
+	
+	<!-- 제품 고유 번호 물품 조회(물품 상세 조회) -->
+	<select id="goodsDetail" parameterType="int" resultType="goodsVO">
+		SELECT * FROM GOODS
+		WHERE GOODS_NUM = #{goodsNum}
+	</select>
+	
+	<!-- 제품명 별 물품 검색 -->
+	<select id="nameList" parameterType="string" resultType="goodsVO">
+		SELECT * FROM GOODS
+		WHERE GOODS_NAME LIKE '%' || #{goodsName} || '%' 
+		ORDER BY GOODS_NAME
+	</select>
+	
+	<select id="user" parameterType="String"
+			resultType="com.mystudy.ajax.vo.GoodsVO">
+		SELECT *
+		FROM GOODS
+		WHERE GOODS_MENU = #{goodsMenu}
+	</select>
+	
+	<!-- 아이디로 이름 조회(로그인 후 이름 띄워주는 용도) -->
+	<select id="idName" parameterType="String" resultType="String">
+		SELECT NAME FROM USERS 
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="userLogin" resultType="userVO" parameterType="userVO">
+		SELECT * FROM USERS
+		WHERE ID = #{id} AND PW = #{pw}
+	</select>
+	
+   
+   <select id="idSearch" parameterType="hashmap" resultType="String">
+		SELECT ID FROM USERS 
+      	WHERE NAME = #{name} 
+      	AND EMAIL = #{email}
+	</select>
+	
+   <select id="pwSearch" parameterType="hashmap" resultType="String">
+		SELECT PW FROM USERS 
+      	WHERE NAME = #{name} 
+      	AND ID = #{id} 
+      	AND EMAIL = #{email}
+	</select>
+	
+		
+	<!-- 회원가입 -->
+	<update id="joinMember" parameterType="userVO">
+		INSERT INTO USERS
+			(ID, PW, NAME, ADDRESS, PHONE, EMAIL, REGDATE, LEVELS, BALANCE)
+		VALUES
+			(#{id},#{pw}, #{name}, #{address}, #{phone}, #{email}, SYSDATE, 'WELCOME', 0)
+	</update>
+    
+    <!-- 탈퇴시 회원 삭제 처리 -->
+    <delete id="deleteMember" parameterType="userVO">
+   	  DELETE FROM USERS
+	  WHERE ID = #{id} and PW = #{pw}
+   	</delete>
+   	
+   		<!-- 아이디 중복검사 -->
+  	<select id="idChk" resultType="String" parameterType="String">
+  		SELECT ID FROM USERS WHERE ID = #{id}
+  	</select>
+  	
+  	<!-- 회원정보 수정 -->
+  	<update id="modifyMember" parameterType="hashmap">
+  		UPDATE USERS
+  		SET  PW = #{pw},
+  			 NAME = #{name},
+  			 ADDRESS = #{address},
+  			 PHONE = #{phone},
+  			 EMAIL = #{email}
+  		WHERE ID = #{id}
+  	</update>
+  	
+  	<!-- 비밀번호 찾기 -->
+  	<select id="pwChk" resultType="userVO">
+  		SELECT PW FROM USERS
+  	</select>
+   	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

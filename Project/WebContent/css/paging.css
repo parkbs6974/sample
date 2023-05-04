@@ -1,0 +1,38 @@
+.paging {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.paging-item {
+  list-style: none;
+  margin: 0 4px;
+}
+
+.paging-link {
+  display: block;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #007bff;
+  background-color: #fff;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  text-decoration: underline; 
+  }
+
+.search {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+}
+
+.search form {
+  margin-right: 10px;
+}
+
+.review-write-button {
+  margin-left: 10px;
+}

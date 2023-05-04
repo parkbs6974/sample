@@ -1,0 +1,73 @@
+
+html, body {
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+}
+
+ .card {
+     margin: 0 auto; /* Added */
+     float: none; /* Added */
+     margin-bottom: 10px; /* Added */
+}
+
+.align-middle{
+	position: relative;
+	left: 500px;
+	margin: 30px;
+	
+}
+
+ .card-title img{
+ 	width: 200px;
+	margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+ }
+ 
+
+#btn-Yes{
+  border: 2px solid #8aa1a1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-primary{
+	background-color: #8aa1a1
+	
+}
+
+.form-signin .form-control {
+ 		position: relative;
+ 		height: auto;
+ 		-webkit-box-sizing: border-box;
+    	-moz-box-sizing: border-box;
+       	 box-sizing: border-box;
+ 		padding: 10px;
+ 		font-size: 16px;
+}
+
+   .card-title{
+       margin-left: 30px;
+   }
+
+
+ .pwdSearch{ 
+   	color: black;
+   	text-decoration: none; 
+   	text-align: center;
+   }
+   
+ .inform{
+ 	text-align: center;
+ 	font-size: 15px;
+ }
+ .maingo{
+ 	width: 100px;
+ 	height: 100px;
+ }
+  
+ .information {
+ 	margin: 10px;
+ 	text-align: center;
+ }

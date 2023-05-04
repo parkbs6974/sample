@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project">
+	
+	<!-- 마이페이지 적립금충전 -->
+	<update id="balance" parameterType="userVO">
+		UPDATE USERS
+		SET BALANCE = #{balance}
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 마이페이지 적립금 차감 -->
+	<update id="balanceMinus" parameterType="hashmap">
+		UPDATE USERS
+		SET BALANCE = #{balance}
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 카테고리별 물품리스트 -->
+	<select id="calist" parameterType="String"
+			resultType="goodsVO">
+		SELECT *
+		FROM GOODS
+		WHERE GOODS_MENU = #{goodsMenu}
+	</select>
+	
+	<!-- 회원별 적립금 조회 -->
+	<select id="balanceList" parameterType="String"
+			resultType="int">
+		SELECT BALANCE
+		FROM USERS
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 물품번호별 물품리스트 -->
+	<select id="goodsDetail" parameterType="int"
+			resultType="goodsVO">
+		SELECT *
+		FROM GOODS
+		WHERE GOODS_NUM = #{goodsNum}
+	</select>
+	
+	<!-- 모든물품리스트 -->
+	<select id="goodsAll" resultType="goodsVO">
+		SELECT *
+		FROM GOODS
+		ORDER BY GOODS_NUM
+	</select>
+	
+	<!-- 물품번호별 물품리스트 -->
+	<select id="goodsOne" resultType="goodsVO" parameterType="int">
+		SELECT *
+		FROM GOODS
+		WHERE GOODS_NUM = #{goodsNum}
+	</select>
+	
+	
+	<!-- 비밀번호 확인 -->
+	<select id="goodsPw" parameterType="String"
+			resultType="com.mystudy.ajax.vo.AdminVO">
+		SELECT *
+		FROM ADMIN
+		WHERE PW = #{pw}
+	</select>
+	
+	<!-- 상단 이름  -->
+	<select id="goodsName" resultType="com.mystudy.ajax.vo.AdminVO">
+		SELECT NAME FROM ADMIN
+	</select>
+	
+	<!-- 물품 입력 -->
+	<insert id="goodsInsert" parameterType="goodsVO">
+		INSERT INTO GOODS
+       		   (GOODS_NUM, GOODS_NAME, GOODS_PRICE, GOODS_SALE
+       		   , GOODS_CONT, GOODS_MENU, GOODS_IMG)
+		VALUES (GOODS_SEQ.NEXTVAL, #{goodsName}, #{goodsPrice}, #{goodsSale}, #{goodsCont}, 
+        	   #{goodsMenu}, #{goodsImg} )
+	</insert>
+	
+	<!-- 물품 삭제 -->
+	<delete id="goodsDelete" parameterType="int">
+		DELETE FROM GOODS WHERE GOODS_NUM = #{goodsNum}
+	</delete>
+	
+	<!--  물품정보 수정 -->
+	<update id="goodsUpdate" parameterType="goodsVO">
+		UPDATE GOODS
+		SET GOODS_NAME = #{goodsName}
+		, GOODS_PRICE = #{goodsPrice}
+		, GOODS_SALE = #{goodsSale}
+		, GOODS_CONT = #{goodsCont}
+		, GOODS_MENU = #{goodsMenu}
+		, GOODS_IMG = #{goodsImg}
+		WHERE GOODS_NUM = #{goodsNum}
+	</update>
+	
+	<!-- 마이페이지 ID기준 주문조회 -->
+   <select id="orderChk" resultType="com.mystudy.ajax.vo.OrderVO">
+      SELECT * 
+      FROM ORDERS_GOODS O, GOODS G
+      WHERE O.ID = #{id}
+      AND O.GOODS_NUM = G.GOODS_NUM
+   </select>
+   
+	<!-- 모든 유저 검색 -->
+	<select id="userAll" resultType="userVO">
+		SELECT * FROM USERS
+	</select>
+	
+	<!--  유저 정보 삭제 -->
+	<delete id="userDelete" parameterType="String">
+		DELETE FROM USERS WHERE ID = #{id}
+	</delete>
+	
+	<!-- 주문자 정보 조회 -->
+	<select id="orderAll" resultType="com.mystudy.ajax.vo.OrderVO">
+		SELECT * FROM USER_ORDERS ORDER BY ORDER_NUM
+	</select>
+	
+	<!-- 정산시스템 id별 -->
+	<select id="idTotal" resultType="com.mystudy.ajax.vo.TotalVO" parameterType="String">
+		SELECT *
+		FROM USER_ORDERS
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 정산시스템 물품별 -->
+	<select id="goodsTotal" resultType="com.mystudy.ajax.vo.TotalVO" parameterType="int">
+		SELECT *
+		FROM USER_ORDERS
+		WHERE GOODS_NUM = #{goodsNum}
+	</select>
+	
+	<!-- 관리자 기준 주문조회 -->
+   <select id="adminorderChk" resultType="com.mystudy.ajax.vo.OrderVO">
+      SELECT * 
+      FROM ORDERS_GOODS O, GOODS G
+      WHERE O.GOODS_NUM = G.GOODS_NUM
+      AND G.GOODS_NUM = #{goodsNum}
+   </select>
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	<!-- 리뷰작성 -->
+	<insert id="qnaInsert" parameterType="com.mystudy.ajax.dao.QnaDAO" >
+	INSERT INTO QUES (QUES_NUM, ID, QUES_TITLE, QUES_CONT, PW_CHECK, QUE_FILE, QUE_DATE)
+	VALUES(QUES_SEQ.NEXTVAL,#{id}, #{quesTitle},#{quesCont}, #{pwCheck}, #{queFile}, SYSDATE)    
+	</insert>
+	
+	<!-- 게시글 조회 -->
+	<select id="one" parameterType="int" resultType="com.mystudy.ajax.vo.QnaVO">
+		SELECT QUES_NUM, ID, QUES_TITLE, QUES_CONT, PW_CHECK, QUE_FILE, QUE_DATE
+        FROM QUES
+        WHERE QUES_NUM = #{quesNum}
+	</select>
+	
+	
+	
+	<!-- 전체 게시글 갯수 조회 -->
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM QUES
+	</select>
+	
+	
+	<!-- 페이지에 해당하는 게시글 조회 -->
+	<select id="list" resultType="com.mystudy.ajax.vo.QnaVO"
+			parameterType="map">
+	SELECT *
+		FROM (SELECT ROWNUM R_NUM, B.*
+		      FROM (SELECT *
+		            FROM QUES
+		            ORDER BY QUES_NUM DESC
+		           ) B
+		     )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 페이지에 해당하는 id 게시글 조회 -->
+	<select id="listId" resultType="com.mystudy.ajax.vo.QnaVO"
+			parameterType="map">
+	SELECT *
+		FROM (SELECT ROWNUM R_NUM, B.*
+		      FROM (SELECT *
+		            FROM QUES
+		             WHERE id = #{id}
+		            ORDER BY QUES_NUM DESC
+		           ) B
+		     )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="update" parameterType="com.mystudy.ajax.vo.QnaVO">
+		UPDATE QUES
+		SET  QUES_TITLE = #{quesTitle},
+        	QUES_CONT = #{quesCont},
+        	QUE_FILE = #{queFile},
+        	 QUE_DATE = SYSDATE
+			WHERE QUES_NUM = #{quesNum}   
+			  
+	</update>
+	<!-- 게시글 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM QUES WHERE QUES_NUM = #{quesNum}
+	</delete>
+	
+	<!--  비밀번호 조회 -->
+	<select id="QnaPw" parameterType="int" resultType="com.mystudy.ajax.vo.QnaVO">
+	SELECT * FROM QUES WHERE QUES_NUM = #{quesNum}
+	</select>
+	
+	<!-- id로 Qna 글 찾기 -->
+	<select id="idList" parameterType="String" resultType="com.mystudy.ajax.vo.QnaVO">
+		SELECT * FROM QUES
+		WHERE ID = #{id}
+		ORDER BY SYSDATE
+	</select>  
+	
+	<!-- 댓글 관리 ============================-->
+	
+	<!-- 댓글 입력하기 -->
+	<!-- 댓글입력 : commInsert -->
+	<insert id="commInsert" parameterType="com.mystudy.ajax.vo.CommentsVO">
+		INSERT INTO COMMENTS
+		       (COMM_NUM, COMM_CONT, COMM_DATE, QUES_NUM)
+		VALUES (COMMENTS_SEQ.NEXTVAL, #{commCont}, SYSDATE, #{quesNum})
+	</insert>
+	 
+	 
+	 <select id="commList" resultType="com.mystudy.ajax.vo.CommentsVO"
+			parameterType="int" >
+		SELECT COMM_NUM, COMM_CONT, COMM_DATE, QUES_NUM
+		FROM COMMENTS
+		WHERE QUES_NUM = #{quesNum}
+		ORDER BY COMM_NUM DESC
+	</select>
+	
+	<!-- 댓들 삭제 -->
+	<delete id="commDelete" parameterType="int">
+		DELETE FROM COMMENTS WHERE COMM_NUM = #{quesNum}
+	</delete> 
+	
+	<!-- 댓글 1개 선택 -->
+	<select id="commOne" parameterType="int" resultType="com.mystudy.ajax.vo.CommentsVO">
+		SELECT COMM_NUM, COMM_CONT, COMM_DATE, QUES_NUM
+		FROM COMMENTS
+		WHERE COMM_NUM = #{commNum}	
+	</select> 
+	
+	<!-- 관리자 전체 문의 조회 -->
+	<select id="qnaAll" resultType="com.mystudy.ajax.vo.QnaVO">
+		SELECT * FROM QUES
+	</select>
+	
+	<!-- 관리자 문의 삭제 -->
+	<delete id="adminqnaDelete" parameterType="int">
+		DELETE FROM QUES WHERE QUES_NUM = #{quesNum}
+	</delete>
+	
+	
+	<!-- ****  review board  **** -->
+	
+	<!-- REVIEW WRITE -->
+	<insert id="reviewInsert" parameterType="com.mystudy.ajax.vo.ReviewVO">
+	INSERT INTO REVIEW (REVIEW_NUM, GOODS_MENU, GOODS_NUM, ID, REVIEW_TITLE, REVIEW_CONT, REVIEW_PW, REVIEW_FILE, REVIEW_DATE, REVIEW_STAR, REVIEW_COUNT)
+     VALUES(REVIEW_SEQ.NEXTVAL, #{goodsMenu}, #{goodsNum}, #{id}, #{reviewTitle}, #{reviewCont}, #{reviewPw}, #{reviewFile}, SYSDATE, #{reviewStar},'')
+	</insert>
+	
+	<!-- 게시글 조회(1개) -->
+	  <select id="reviewOne" parameterType="int" resultType="com.mystudy.ajax.vo.ReviewVO">
+		SELECT REVIEW_NUM, GOODS_MENU, GOODS_NUM, ID, REVIEW_TITLE, REVIEW_CONT, REVIEW_PW, REVIEW_FILE, REVIEW_DATE, REVIEW_STAR, REVIEW_COUNT
+        FROM REVIEW
+        WHERE REVIEW_NUM = #{reviewNum}
+	</select> 
+	
+	<!-- 전체 게시글 갯수 조회 -->
+	 <select id="reviewTotalCount" resultType="int">
+		SELECT COUNT(*) AS CNT FROM REVIEW
+	</select> 
+	 
+	 
+	 
+	<select id="Reviewlist" resultType="com.mystudy.ajax.vo.ReviewVO"
+			parameterType="map">
+	SELECT *
+		FROM (SELECT ROWNUM R_NUM, B.*
+		      FROM (SELECT *
+		            FROM REVIEW
+		            ORDER BY REVIEW_NUM DESC
+		           ) B
+		     )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select> 
+	
+	
+	<!-- 관리자 전체 후기 조회 -->
+	<select id="reviewAll" resultType="com.mystudy.ajax.vo.ReviewVO">
+		SELECT * FROM REVIEW
+	</select>
+	
+	<!-- 관리자 후기 삭제 -->
+	<delete id="adminreviewDelete" parameterType="int">
+		DELETE FROM REVIEW WHERE REVIEW_NUM = #{reviewNum}
+	</delete>
+	
+	<!--  비밀번호 조회 -->
+	<select id="reviewPw" parameterType="int" resultType="com.mystudy.ajax.vo.ReviewVO">
+	SELECT * FROM REVIEW WHERE REVIEW_NUM = #{reviewNum}
+	</select>
+	
+	<!-- review update -->
+	<!-- 게시글 수정 -->
+   <update id="reviewUpdate" parameterType="com.mystudy.ajax.vo.ReviewVO">
+         
+      UPDATE REVIEW
+      SET ID = #{id},
+           REVIEW_TITLE = #{reviewTitle},
+           REVIEW_CONT = #{reviewCont},
+           REVIEW_PW = #{reviewPw},
+           REVIEW_FILE =#{reviewFile},
+           REVIEW_DATE = SYSDATE,
+           REVIEW_STAR = #{reviewStar}
+         WHERE REVIEW_NUM = #{reviewNum}   
+   </update>
+	
+	<!-- review 게시글 삭제 -->
+	<delete id="reviewDelete" parameterType="int">
+		DELETE FROM REVIEW WHERE REVIEW_NUM = #{reviewNum}
+	</delete>
+	
+	<!-- 물품상세페이지에서 물품번호해당하는 게시글 찾기 -->
+	<select id="reViewDetail" resultType="com.mystudy.ajax.vo.ReviewVO">
+		SELECT * FROM REVIEW
+		WHERE GOODS_NUM = #{goodsNum}
+	</select>
+	
+	<!-- 페이지에 해당하는 게시글 조회 -->
+	<select id="reViewDetailPage" resultType="com.mystudy.ajax.vo.ReviewVO"
+			parameterType="map">
+		SELECT *
+		FROM (SELECT ROWNUM R_NUM, B.*
+		      FROM (SELECT *
+		            FROM REVIEW
+		            WHERE GOODS_NUM = ${goodsNum}
+		           ) B
+		     )
+		WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cart">
+	<!--====== 장바구니 mapper========== -->
+	
+	<!-- 회원 별 장바구니 정보 불러오기 -->
+	<resultMap type="goodsVO" id="goodsVO">
+		<result column="GOODS_IMG" property="goodsImg"></result>
+		<result column="GOODS_CONT" property="goodsCont"></result>
+		<result column="GOODS_PRICE" property="goodsPrice"></result>
+	</resultMap>
+	
+	
+	<resultMap type="cartVO" id="cartVO">
+		<result column="CART_NUM" property="cartNum"/>
+		<result column="GOODS_NUM" property="goodsNum"></result>
+		<result column="GOODS_NAME" property="goodsName"></result>
+		<result column="ID" property="id"></result>
+		<result column="CNT" property="cnt"></result>
+		<result column="GOODS_SALE" property="goodsSale"></result>
+	
+		<collection property="goodsVO" resultMap="goodsVO">
+		</collection>
+	</resultMap>
+	
+	<!-- 회원별 장바구니 조회 -->
+	<select id="cartList" parameterType="String" resultMap="cartVO">
+		SELECT 
+		c.CART_NUM, c.GOODS_NUM, c.GOODS_NAME, c.ID, c.CNT, c.GOODS_SALE, 
+		g.GOODS_IMG, g.GOODS_CONT, g.GOODS_PRICE 
+		FROM CART c INNER JOIN GOODS g 
+		ON c.GOODS_NUM = g.GOODS_NUM 
+		WHERE c.ID = #{c.id}
+		ORDER BY c.CART_NUM
+	</select>
+	
+	<!-- 결제 페이지 추가용 -->
+	<select id="cartToOrder" parameterType="int" resultMap="cartVO">
+		SELECT 
+		c.CART_NUM, c.GOODS_NUM, c.GOODS_NAME, c.ID, c.CNT, c.GOODS_SALE, 
+		g.GOODS_IMG, g.GOODS_CONT, g.GOODS_PRICE 
+		FROM CART c INNER JOIN GOODS g 
+		ON c.GOODS_NUM = g.GOODS_NUM 
+		WHERE c.CART_NUM = #{c.cartNum}
+		ORDER BY c.CART_NUM
+	</select>
+	
+	<!-- 회원별 장바구니 조회 -->
+	<select id="address" parameterType="String" resultType="String">
+		SELECT ADDRESS 
+		FROM USERS 
+		WHERE ID = #{id}
+	</select>
+	
+	<update id="cartInsert" parameterType="cartVO">
+		MERGE INTO CART
+		USING DUAL
+		ON (GOODS_NUM = #{goodsNum} AND ID = #{id} )
+		WHEN MATCHED THEN
+   		 	UPDATE SET CNT = 2
+		WHEN NOT MATCHED THEN
+   		 	INSERT (CART_NUM, GOODS_NUM, GOODS_NAME, 
+    				ID, CNT, GOODS_SALE)
+        	VALUES (CART_SEQ.NEXTVAL, #{goodsNum}, #{goodsName}, 
+        			#{id}, 1, #{goodsSale})
+	</update>
+	
+	<update id="cartCntUpdate" parameterType="cartVO">
+		UPDATE CART SET CNT = #{cnt}
+		WHERE ID = #{id} AND CART_NUM = #{cartNum}
+	</update>
+	
+	<!-- 장바구니 삭제용 -->
+	<delete id="cartGoodsDelete" parameterType="cartVO">
+	 DELETE FROM CART 
+	 WHERE ID = #{id} AND CART_NUM = #{cartNum}
+	</delete>
+	
+	<!-- 장바구니에서 주문 페이지로 이동 후 주문에 등록하기 -->
+	<insert id="order" parameterType="hashmap">
+		INSERT INTO USER_ORDERS 
+		(ORDER_NUM, ID, GOODS_SALE, ADDRESS, REGDATE) 
+		VALUES (ORDER_SEQ.NEXTVAL, #{id}, #{goodsSale}, #{address}, SYSDATE)
+	</insert>
+	<select id="orderNumSelect" parameterType="hashmap" resultType="int">
+		SELECT ORDER_NUM
+		FROM USER_ORDERS
+		WHERE ID = #{id} AND GOODS_SALE = #{goodsSale}
+	</select>
+	<insert id="orderGoods" parameterType="orderGoodsVO">
+	INSERT INTO ORDERS_GOODS
+		(CNT, ORDER_NUM, GOODS_NUM, ID) 
+		VALUES (#{cnt}, #{orderNum}, #{goodsNum}, #{id})
+	</insert>
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
